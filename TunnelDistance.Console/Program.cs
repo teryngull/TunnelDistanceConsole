@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 
 namespace TunnelDistance.Console
 {
@@ -6,7 +6,7 @@ namespace TunnelDistance.Console
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Debug.WriteLine("Hello World!");
         }
     }
 }
