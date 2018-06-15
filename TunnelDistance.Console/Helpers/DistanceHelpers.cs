@@ -10,65 +10,78 @@ namespace TunnelDistance.Console.Helpers
 		/// <summary>
 		/// Calculates the distance between a start and end location (above ground or via tunnels)
 		/// </summary>
-		/// <param name="startLat">The start location latitude.</param>
-		/// <param name="startLong">The start location longitude.</param>
-		/// <param name="endLat">The end location latitude.</param>
-		/// <param name="endLong">The end location longitude.</param>
+		/// <param name="startLocation">The start location latitude and longitude.</param>
+		/// <param name="endLocation">The end location latitude and longitude.</param>
 		/// <param name="tunnelList">The list of tunnel locations.</param>
 		/// <returns>The smallest distance between the start and end locations via the tunnels or above ground</returns>
-		public static int CalculateShortestPathTotal(int startLat, int startLong, int endLat, int endLong, List<Tunnel> tunnelList)
+		public static int CalculateShortestPathTotal(Location startLocation, Location endLocation, List<Tunnel> tunnelList)
 		{
 			// calculate the above ground distance for comparison
-			var aboveGroundDistance = CalculateManhattanDistance(startLat, startLong, endLat, endLong);
+			var aboveGroundDistance = CalculateManhattanDistance(startLocation.Latitude,
+			                                                     startLocation.Longitude,
+			                                                     endLocation.Latitude,
+			                                                     endLocation.Longitude);
 			Debug.WriteLine($"Above Ground Distance = {aboveGroundDistance}");
 
 			// calculate the distance for each tunnel
-			var shortestDistanceViaTunnel = CalculateDistanceForEachTunnelPath(startLat, startLong, endLat, endLong, tunnelList);
-			Debug.WriteLine($"Shortest Distance Via Tunnel = {shortestDistanceViaTunnel}");
+			var shortestDistanceTotal = CalculateDistanceForEachTunnelPath(startLocation,
+			                                                                   endLocation,
+			                                                                   aboveGroundDistance,
+			                                                                   tunnelList);
+			Debug.WriteLine($"Shortest Distance Total = {shortestDistanceTotal}");
 
-			return Math.Min(aboveGroundDistance, shortestDistanceViaTunnel);
+			return shortestDistanceTotal;
 		}
 
 		/// <summary>
 		/// Calculates the distance between a start and end location for each tunnel path available for a given list of tunnel locations
 		/// </summary>
-		/// <param name="startLat">The start location latitude.</param>
-		/// <param name="startLong">The start location longitude.</param>
-		/// <param name="endLat">The end location latitude.</param>
-		/// <param name="endLong">The end location longitude.</param>
+		/// <param name="startLocation">The start location latitude and longitude.</param>
+		/// <param name="endLocation">The end location latitude and longitude.</param>
+		/// <param name="aboveGroundDistance">The distance between the start and stop locations above ground for comparison.</param>
 		/// <param name="tunnels">The list of tunnel locations.</param>
 		/// <returns>The smallest distance between the start and end locations via the tunnels</returns>
-		public static int CalculateDistanceForEachTunnelPath(int startLat, int startLong, int endLat, int endLong, List<Tunnel> tunnels)
+		public static int CalculateDistanceForEachTunnelPath(Location startLocation, Location endLocation, int aboveGroundDistance, List<Tunnel> tunnels)
 		{
-			int shortestDistance = 100;
+			int shortestDistance = aboveGroundDistance;
 
 			foreach (Tunnel tunnelEntrance in tunnels)
 			{
 				// calculate the distance to the tunnel entrances from the start location
-				var distanceToTunnelEntrance = CalculateManhattanDistance(startLat, startLong, tunnelEntrance.Latitude, tunnelEntrance.Longitude);
-				Debug.WriteLine($"Distance To Tunnel (Lat: {tunnelEntrance.Latitude}, Long: {tunnelEntrance.Longitude}) Entrance = {distanceToTunnelEntrance}");
+				var distanceToTunnelEntrance = CalculateManhattanDistance(startLocation.Latitude,
+				                                                          startLocation.Longitude,
+				                                                          tunnelEntrance.Location.Latitude,
+				                                                          tunnelEntrance.Location.Longitude);
+				Debug.WriteLine($"Distance To Tunnel (Lat: {tunnelEntrance.Location.Latitude}, Long: {tunnelEntrance.Location.Longitude}) Entrance = {distanceToTunnelEntrance}");
 
 				// calculate the distance to the junction from the start location
 				var distanceToJunction = distanceToTunnelEntrance + tunnelEntrance.Length;
-				Debug.WriteLine($"Distance To Tunnel (Lat: {tunnelEntrance.Latitude}, Long: {tunnelEntrance.Longitude}) Junction (from entrance) = {distanceToJunction}");
+				Debug.WriteLine($"Distance To Tunnel (Lat: {tunnelEntrance.Location.Latitude}, Long: {tunnelEntrance.Location.Longitude}) Junction (from entrance) = {distanceToJunction}");
 
 				foreach (Tunnel tunnelExit in tunnels)
 				{
-					// calculate the distance from the tunnel exit to the end location
-					var distanceFromTunnelExit = CalculateManhattanDistance(endLat, endLong, tunnelExit.Latitude, tunnelExit.Longitude);
-					Debug.WriteLine($"Distance From Tunnel (Lat: {tunnelExit.Latitude}, Long: {tunnelExit.Longitude}) Exit = {distanceFromTunnelExit}");
-
-					// calculate the distance from the junction to the end location
-					var distanceFromJunction = distanceFromTunnelExit + tunnelExit.Length;
-					Debug.WriteLine($"Distance From Tunnel (Lat: {tunnelExit.Latitude}, Long: {tunnelExit.Longitude}) Junction (to exit) = {distanceFromJunction}");
-
-					// add up the totals to get the total distance from start location to end location
-					var totalDistance = distanceToJunction + distanceFromJunction;
-					Debug.WriteLine($"Total distance from Start (Lat: {startLat}, Long: {startLong}) to End ((Lat{endLat}, Long{endLong})= {totalDistance}");
-
-					if (totalDistance < shortestDistance)
+					// no need to calculate the distance out the same exit as the entrance because obviously that's not going to be the shortest choice!
+					if (tunnelEntrance.Location.Latitude != tunnelExit.Location.Latitude && tunnelEntrance.Location.Longitude != tunnelExit.Location.Longitude)
 					{
-						shortestDistance = totalDistance;
+						// calculate the distance from the tunnel exit to the end location
+						var distanceFromTunnelExit = CalculateManhattanDistance(endLocation.Latitude,
+						                                                        endLocation.Longitude,
+						                                                        tunnelExit.Location.Latitude,
+						                                                        tunnelExit.Location.Longitude);
+						Debug.WriteLine($"Distance From Tunnel (Lat: {tunnelExit.Location.Latitude}, Long: {tunnelExit.Location.Longitude}) Exit = {distanceFromTunnelExit}");
+
+						// calculate the distance from the junction to the end location
+						var distanceFromJunction = distanceFromTunnelExit + tunnelExit.Length;
+						Debug.WriteLine($"Distance From Tunnel (Lat: {tunnelExit.Location.Latitude}, Long: {tunnelExit.Location.Longitude}) Junction (to exit) = {distanceFromJunction}");
+
+						// add up the totals to get the total distance from start location to end location
+						var totalTunnelDistance = distanceToJunction + distanceFromJunction;
+						Debug.WriteLine($"Total distance from Start (Lat: {startLocation.Latitude}, Long: {startLocation.Longitude}) to End ((Lat{endLocation.Latitude}, Long{endLocation.Longitude})= {totalTunnelDistance}");
+
+						if (totalTunnelDistance < shortestDistance)
+						{
+							shortestDistance = totalTunnelDistance;
+						}
 					}
 				}
 			}

@@ -13,20 +13,29 @@ namespace TunnelDistance.Console
 			{
 				new Tunnel
 				{
-					Latitude = 1,
-					Longitude = 6,
+					Location = new Location
+					{
+						Latitude = 1,
+						Longitude = 6,
+					},
 					Length = 2,
 				},
 				new Tunnel
 				{
-					Latitude = 7,
-					Longitude = 3,
+					Location = new Location
+					{
+						Latitude = 7,
+						Longitude = 3,
+					},
 					Length = 8,
 				},
 				new Tunnel
 				{
-					Latitude = 4,
-					Longitude = 1,
+					Location = new Location
+					{
+						Latitude = 4,
+						Longitude = 1,
+					},
 					Length = 3,
 				},
             };
@@ -35,26 +44,38 @@ namespace TunnelDistance.Console
 			{
 				new Tunnel
 				{
-					Latitude = 1,
-					Longitude = 2,
+					Location = new Location
+					{
+						Latitude = 1,
+						Longitude = 2,
+					},
 					Length = 9,
 				},
 				new Tunnel
 				{
-					Latitude = 8,
-					Longitude = 3,
+					Location = new Location
+					{
+						Latitude = 8,
+						Longitude = 3,
+					},
 					Length = 4,
 				},
 				new Tunnel
 				{
-					Latitude = 2,
-					Longitude = 7,
+					Location = new Location
+					{
+						Latitude = 2,
+						Longitude = 7,
+					},
 					Length = 5,
 				},
 			};
 
-            var minimumDistance1 = DistanceHelpers.CalculateShortestPathTotal(7, 2, 1, 8, tunnelList);
-            var minimumDistance2 = DistanceHelpers.CalculateShortestPathTotal(7, 2, 1, 8, tunnelList2);
+			var startLocation = new Location { Latitude = 7, Longitude = 2 };
+			var endLocation = new Location { Latitude = 1, Longitude = 8 };
+
+			var minimumDistance1 = DistanceHelpers.CalculateShortestPathTotal(startLocation, endLocation, tunnelList);
+			var minimumDistance2 = DistanceHelpers.CalculateShortestPathTotal(startLocation, endLocation, tunnelList2);
 		}
 	}
 }
