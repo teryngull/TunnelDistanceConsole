@@ -190,6 +190,56 @@ namespace TunnelDistanceConsole.UnitTests
 				new List<Tunnel>(),
 				12,
 			};
+
+			yield return new object[]
+			{
+				new Location
+				{
+					Latitude = 5,
+					Longitude = 6,
+				},
+				new Location
+				{
+					Latitude = 8,
+					Longitude = 3,
+				},
+				new List<Tunnel>
+				{
+					new Tunnel {
+						Location = new Location
+						{
+							Latitude = 1,
+							Longitude = 2,
+						},
+						Length = 9,
+					},
+					new Tunnel {
+						Location = new Location
+						{
+							Latitude = 8,
+							Longitude = 3,
+						},
+						Length = 4,
+					},
+					new Tunnel {
+						Location = new Location
+						{
+							Latitude = 2,
+							Longitude = 7,
+						},
+						Length = 5,
+					},
+					new Tunnel {
+						Location = new Location
+						{
+							Latitude = 5,
+							Longitude = 5,
+						},
+						Length = 1,
+					},
+				},
+				6,
+			};
 		}
 	}
 }
