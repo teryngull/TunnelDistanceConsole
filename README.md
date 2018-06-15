@@ -4,10 +4,50 @@ Console app to find the shortest total distance you'll need to travel given the 
 
 ## Getting Started
 
-This application was created using VS 2017 for Mac. The console project is a .NET Core 2.0 and the unit test project is using xUnit.
+This application was created using VS 2017 for Mac. The console project is a .NET Core 2.0 and the unit test project is using xUnit. Theorectically, the console app would read in a list of tunnels as well as start and end locations and perform the calculations. Instead it simply uses a Tunnel object created on the fly based on the example given below.
+
+## Unit Testing
+
+There are 12 sample xunit tests included - and yes, more could have been written! :)
+
+- The first 6 are testing the "CalculateManhattanDistance" method to verify that it calculating the distance between two points correctly. These test cases prove that for any integer, it will calculate the Manhattan Distance between them.
+- The second 6 are testing the "CalculateShortestPathTotal" method to verify that is comparing the above ground distance to the shortest tunnel path and returning the correct smallest distance found between the two. This includes a test case with 4 tunnels as well as various locations and other tunnels situations.
+- There are no tests written against "CalculateDistanceForEachTunnelPath", but there should be.
+- There are no tests written against the Program.cs or models, but there could be.
 
 
-## Additional Project Info
+## Example output from console app
+
+```
+Above Ground Distance = 12
+Distance To Tunnel (Lat: 1, Long: 6) Entrance = 10
+Distance To Tunnel (Lat: 1, Long: 6) Junction (from entrance) = 12
+Distance From Tunnel (Lat: 7, Long: 3) Exit = 11
+Distance From Tunnel (Lat: 7, Long: 3) Junction (to exit) = 19
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 31
+Distance From Tunnel (Lat: 4, Long: 1) Exit = 10
+Distance From Tunnel (Lat: 4, Long: 1) Junction (to exit) = 13
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 25
+Distance To Tunnel (Lat: 7, Long: 3) Entrance = 1
+Distance To Tunnel (Lat: 7, Long: 3) Junction (from entrance) = 9
+Distance From Tunnel (Lat: 1, Long: 6) Exit = 2
+Distance From Tunnel (Lat: 1, Long: 6) Junction (to exit) = 4
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 13
+Distance From Tunnel (Lat: 4, Long: 1) Exit = 10
+Distance From Tunnel (Lat: 4, Long: 1) Junction (to exit) = 13
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 22
+Distance To Tunnel (Lat: 4, Long: 1) Entrance = 4
+Distance To Tunnel (Lat: 4, Long: 1) Junction (from entrance) = 7
+Distance From Tunnel (Lat: 1, Long: 6) Exit = 2
+Distance From Tunnel (Lat: 1, Long: 6) Junction (to exit) = 4
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 11
+Distance From Tunnel (Lat: 7, Long: 3) Exit = 11
+Distance From Tunnel (Lat: 7, Long: 3) Junction (to exit) = 19
+Total distance from Start (Lat: 7, Long: 2) to End ((Lat1, Long8)= 26
+Shortest Distance Total = 11
+```
+
+## Coding Project Instructions
 
 Uh oh! You've slept through your alarm and it looks like you'll be late for your shift with the terraforming crew!
 
