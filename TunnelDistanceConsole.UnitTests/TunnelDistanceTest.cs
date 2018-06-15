@@ -13,6 +13,7 @@ namespace TunnelDistanceConsole.UnitTests
 		[InlineData(1, 1, 1, 8, 7)]
 		[InlineData(1, 8, 1, 1, 7)]
 		[InlineData(8, 8, 0, 0, 16)]
+		[InlineData(int.MinValue, -1, int.MinValue, -1, 0)]
 		public void CanCalculateManhattanDistance(int value1, int value2, int value3, int value4, int expected)
 		{
 			var result = DistanceHelpers.CalculateManhattanDistance(value1, value2, value3, value4);
