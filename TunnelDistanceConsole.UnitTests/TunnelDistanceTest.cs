@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using TunnelDistance.Console.Helpers;
+using TunnelDistance.Console.Models;
 using Xunit;
 
 namespace TunnelDistanceConsole.UnitTests
@@ -14,6 +16,15 @@ namespace TunnelDistanceConsole.UnitTests
 		public void CanCalculateManhattanDistance(int value1, int value2, int value3, int value4, int expected)
 		{
 			var result = DistanceHelpers.CalculateManhattanDistance(value1, value2, value3, value4);
+
+			Assert.Equal(expected, result);
+		}
+
+		[Theory]
+		[MemberData(nameof(TunnelTestDataGenerator.GetTunnelsFromDataGenerator), MemberType = typeof(TunnelTestDataGenerator))]
+		public void CanGetShortestPath(Location startLocation, Location endLocation, List<Tunnel> tunnelList, int expected)
+		{
+			var result = DistanceHelpers.CalculateShortestPathTotal(startLocation, endLocation, tunnelList);
 
 			Assert.Equal(expected, result);
 		}
